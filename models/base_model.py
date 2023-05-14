@@ -7,12 +7,13 @@ import uuid
 import datetime
 from models import storage
 
+
 class BaseModel():
     """
     Class BaseModel that defines all common
     attributes/methods for other classes
     """
-    
+
     def __init__(self, *args, **kwargs):
         """
         Function that initializes BaseModel
@@ -28,8 +29,10 @@ class BaseModel():
                     continue
                 else:
                     setattr(self, key, value)
-            self.created_at = datetime.datetime.strptime(self.created_at, '%Y-%m-%dT%H:%M:%S.%f')
-            self.updated_at = datetime.datetime.strptime(self.updated_at, '%Y-%m-%dT%H:%M:%S.%f')
+            self.created_at = datetime.datetime.strptime(self.(
+                created_at, '%Y-%m-%dT%H:%M:%S.%f'))
+            self.updated_at = datetime.datetime.strptime(self.(
+                updated_at, '%Y-%m-%dT%H:%M:%S.%f'))
 
     def __str__(self):
         """
