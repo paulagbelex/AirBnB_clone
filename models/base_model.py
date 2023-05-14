@@ -29,10 +29,10 @@ class BaseModel():
                     continue
                 else:
                     setattr(self, key, value)
-            self.created_at = datetime.datetime.strptime(self.(
-                created_at, '%Y-%m-%dT%H:%M:%S.%f'))
-            self.updated_at = datetime.datetime.strptime(self.(
-                updated_at, '%Y-%m-%dT%H:%M:%S.%f'))
+            self.created_at = (datetime.datetime.strptime(
+              self.created_at, '%Y-%m-%dT%H:%M:%S.%f'))
+            self.updated_at = (datetime.datetime.strptime(
+              self.updated_at, '%Y-%m-%dT%H:%M:%S.%f'))
 
     def __str__(self):
         """
