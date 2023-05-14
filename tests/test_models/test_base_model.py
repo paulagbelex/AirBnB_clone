@@ -1,11 +1,21 @@
+#!/usr/bin/python3
+"""
+Unittest for BaseModel class
+"""
 import unittest
 import datetime
 import uuid
-
 from models.base_model import BaseModel
 
+
 class TestBaseModel(unittest.TestCase):
+    """
+    Test Cases for the BaseModel class.
+    """
     def test_init(self):
+        """
+        Tests instantiation of BaseModel class when kwargs is empty.
+        """
         # Test when kwargs is empty
         b1 = BaseModel()
         self.assertIsInstance(b1.id, str)
@@ -21,11 +31,17 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(b2.updated_at), "2022-05-02 10:00:00")
 
     def test_id(self):
+        """
+        Tests for unique user ids.
+        """
         b = BaseModel()
         self.assertIsInstance(b.id, str)
         self.assertIsNotNone(b.id)
 
     def test_to_dict(self):
+        """
+        Tests the public instance method to_dict().
+        """
         b = BaseModel()
         d = b.to_dict()
         self.assertIsInstance(d, dict)
@@ -33,7 +49,11 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(d["created_at"], b.created_at.isoformat())
         self.assertEqual(d["updated_at"], b.updated_at.isoformat())
         self.assertEqual(d["__class__"], "BaseModel")
+        
     def test_save(self):
+        """
+        Tests the public instance method to_dict().
+        """
         b = BaseModel()
         original_updated_at = b.updated_at
         with patch('datetime.datetime') as mock_date:
