@@ -4,8 +4,7 @@ Contains a class BaseModel
 """
 
 import uuid
-import datetime
-from models import storage
+from datetime import datetime
 
 
 class BaseModel():
@@ -13,26 +12,13 @@ class BaseModel():
     Class BaseModel that defines all common
     attributes/methods for other classes
     """
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         """
         Function that initializes BaseModel
         """
-        if len(kwargs) == 0:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.datetime.today()
-            self.updated_at = datetime.datetime.today()
-            storage.new(self)
-        else:
-            for key, value in kwargs.items():
-                if key == "__class__":
-                    continue
-                else:
-                    setattr(self, key, value)
-            self.created_at = (datetime.datetime.strptime(
-              self.created_at, '%Y-%m-%dT%H:%M:%S.%f'))
-            self.updated_at = (datetime.datetime.strptime(
-              self.updated_at, '%Y-%m-%dT%H:%M:%S.%f'))
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def __str__(self):
         """
@@ -43,19 +29,18 @@ class BaseModel():
         return a
 
     def save(self):
-        """
-        Function to update the public instance
-        attribute 'updated_at' with the current datetime
-        """
-        self.updated_at = datetime.datetime.today()
-        storage.save()
+        self.updated_at = datetime.today()
 
     def to_dict(self):
         """
         returns a dictionary containing all keys/values
         of __dict__ of the instance
         """
-        self.__dict__['__class__'] = type(self).__name__
-        self.created_at = str(self.created_at.isoformat())
-        self.updated_at = str(self.updated_at.isoformat())
-        return self.__dict__
+        new_dict = self.__dict__.copy()
+        new_dict['__class__'] = type(self).__name__
+        for key, value in new_dict.items():
+            if key == "created_at":
+                new_dict[key] = str(self.created_at.isoformat())
+            if key == "updated_at":
+                new_dict[key] = str(self.updated_at.isoformat())
+        return new_dict
