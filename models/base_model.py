@@ -12,7 +12,7 @@ class BaseModel():
     Class BaseModel that defines all common
     attributes/methods for other classes
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Function that initializes BaseModel
         """
