@@ -5,6 +5,7 @@ Contains a class BaseModel
 
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel():
@@ -32,6 +33,7 @@ class BaseModel():
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self)
 
     def __str__(self):
         """
@@ -43,6 +45,7 @@ class BaseModel():
 
     def save(self):
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
@@ -53,7 +56,7 @@ class BaseModel():
         new_dict['__class__'] = type(self).__name__
         for key, value in new_dict.items():
             if key == "created_at":
-                new_dict[key] = str(self.created_at.isoformat())
+                new_dict[key] = value.isoformat())
             if key == "updated_at":
-                new_dict[key] = str(self.updated_at.isoformat())
+                new_dict[key] = value.isoformat())
         return new_dict
