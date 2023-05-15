@@ -5,7 +5,7 @@ Contains a class FileStorage
 
 import json
 import os.path
-import datetime
+from datetime import datetime
 
 
 class FileStorage():
@@ -37,54 +37,21 @@ class FileStorage():
         """
         temp = {}
         tmp = FileStorage.__objects
-        a = 1
-        old_storage = {}
-        for key, value in FileStorage.__objects.items():
-            if type(value) is not dict:
-                old_storage[a] = value
-            a = a + 1
-        obj = []
         for key, value in tmp.items():
             if type(value) is not dict:
                 value_1 = value.__dict__.copy()
+                value_1['__class__'] = type(value).__name__
                 obj.append(value)
                 temp[key] = value_1
-            else:
-                temp[key] = value
-        a = 0
         if type(value) is not dict:
             for key_1, value_1 in temp.items():
-                for key in value_1:
-                    if key == 'created_at':
-                        value_1[key] = str(obj[a].created_at.isoformat())
-                    if key == 'updated_at':
-                        value_1[key] = str(obj[a].updated_at.isoformat())
-                value_1['__class__'] = type(obj[a]).__name__
-                a = a + 1
-        else:
-            val = temp['updated_at']
-            temp['updated_at'] = str(val.isoformat())
+                for key, v in value_1.items():
+                    if key == 'created_at' and isinstance(v, (datetime, )):
+                        value_1[key] = v.isoformat()
+                    if key == 'updated_at' and isinstance(v, (datetime, )):
+                        value_1[key] = v.isoformat()
         with open(FileStorage.__file_path, 'w') as json_file:
             json.dump(temp, json_file)
-        """
-        for key_1, value_1 in old_storage.items():
-            for key, value in value_1.items():
-                if key == 'created_at':
-                    value_1[key] = datetime.datetime.strptime
-                    (value, '%Y-%m-%dT%H:%M:%S.%f')
-                if key == 'updated_at':
-                    value_1[key] = datetime.datetime.strptime
-                    (value, '%Y-%m-%dT%H:%M:%S.%f')
-        for key_1, value_1 in old_storage.items():
-            for key, value in value_1.items():
-                if key == '__class__':
-                    del value_1[key]
-                    break
-        """
-        a = 1
-        for key, value in FileStorage.__objects.items():
-            FileStorage.__objects[key] = old_storage[a]
-            a = a + 1
 
     def reload(self):
         """
