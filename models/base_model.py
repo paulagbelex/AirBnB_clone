@@ -22,10 +22,10 @@ class BaseModel():
                     continue
                 elif key == "created_at":
                     self.created_at = (datetime.strptime(
-                    self.created_at, '%Y-%m-%dT%H:%M:%S.%f'))
+                    value, '%Y-%m-%dT%H:%M:%S.%f'))
                 elif key == "updated_at":
                     self.updated_at = (datetime.strptime(
-                    self.updated_at, '%Y-%m-%dT%H:%M:%S.%f'))
+                    value, '%Y-%m-%dT%H:%M:%S.%f'))
                 else:
                     setattr(self, key, value)
         else:
