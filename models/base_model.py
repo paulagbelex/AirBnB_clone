@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 """
 Contains a class BaseModel
 """
@@ -17,7 +16,7 @@ class BaseModel():
         """
         Function that initializes BaseModel
         """
-        if kwargs is not None or kwargs != {}:
+        if kwargs is not None and len(kwargs) != 0:
             for key, value in kwargs.items():
                 if key == "__class__":
                     continue
@@ -34,7 +33,7 @@ class BaseModel():
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
-
+            
     def __str__(self):
         """
         String representation of BaseModel
@@ -46,7 +45,7 @@ class BaseModel():
     def save(self):
         self.updated_at = datetime.now()
         storage.save()
-
+        
     def to_dict(self):
         """
         returns a dictionary containing all keys/values
@@ -56,7 +55,7 @@ class BaseModel():
         new_dict['__class__'] = type(self).__name__
         for key, value in new_dict.items():
             if key == "created_at":
-                new_dict[key] = value.isoformat())
+                new_dict[key] = value.isoformat()
             if key == "updated_at":
-                new_dict[key] = value.isoformat())
+                new_dict[key] = value.isoformat()
         return new_dict
