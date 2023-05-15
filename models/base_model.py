@@ -21,10 +21,10 @@ class BaseModel():
                 if key == "__class__":
                     continue
                 elif key == "created_at":
-                    self.created_at = (datetime.strptime(
+                    self.__dict__["created_at"] = (datetime.strptime(
                     value, '%Y-%m-%dT%H:%M:%S.%f'))
                 elif key == "updated_at":
-                    self.updated_at = (datetime.strptime(
+                    self.__dict__["updated_at"] = (datetime.strptime(
                     value, '%Y-%m-%dT%H:%M:%S.%f'))
                 else:
                     setattr(self, key, value)
@@ -42,7 +42,7 @@ class BaseModel():
         return a
 
     def save(self):
-        self.updated_at = datetime.today()
+        self.updated_at = datetime.now()
 
     def to_dict(self):
         """
