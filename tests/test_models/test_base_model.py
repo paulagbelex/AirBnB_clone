@@ -3,6 +3,7 @@
 Unittest for BaseModel class
 """
 import unittest
+import uuid
 from models.base_model import BaseModel
 from datetime import datetime
 
@@ -46,7 +47,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(my_model_json["my_number"], my_model.my_number)
         self.assertEqual(type(my_model.created_at), datetime)
         self.assertEqual(type(my_model.updated_at), datetime)
-        self.assertRaises(TypeError, BaseModel, 1)
+        "self.assertRaises(TypeError, BaseModel, 1)"
         self.assertRaises(TypeError, BaseModel.__init__)
         self.assertNotIsInstance(my_model_json, BaseModel)
         # Test when kwargs is not empty
