@@ -23,10 +23,12 @@ class BaseModel():
                     continue
                 elif key == "created_at":
                     self.__dict__["created_at"] = (datetime.strptime(
-                    value, '%Y-%m-%dT%H:%M:%S.%f'))
+
+                        value, '%Y-%m-%dT%H:%M:%S.%f'))
                 elif key == "updated_at":
                     self.__dict__["updated_at"] = (datetime.strptime(
-                    value, '%Y-%m-%dT%H:%M:%S.%f'))
+
+                        value, '%Y-%m-%dT%H:%M:%S.%f'))
                 else:
                     setattr(self, key, value)
         else:
@@ -34,7 +36,7 @@ class BaseModel():
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
-            
+
     def __str__(self):
         """
         String representation of BaseModel
@@ -46,7 +48,7 @@ class BaseModel():
     def save(self):
         self.updated_at = datetime.now()
         storage.save()
-        
+
     def to_dict(self):
         """
         returns a dictionary containing all keys/values

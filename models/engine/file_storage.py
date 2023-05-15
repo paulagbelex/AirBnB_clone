@@ -41,8 +41,8 @@ class FileStorage():
             if type(value) is not dict:
                 value_1 = value.__dict__.copy()
                 value_1['__class__'] = type(value).__name__
-                obj.append(value)
                 temp[key] = value_1
+        value = None
         if type(value) is not dict:
             for key_1, value_1 in temp.items():
                 for key, v in value_1.items():
