@@ -5,6 +5,7 @@ Contains a class for entry to command interpreter
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -34,7 +35,7 @@ class HBNBCommand(cmd.Cmd):
                     x = False
                     print("** class doesn't exist **")
                 if x is True:
-                    my_model = BaseModel()
+                    my_model = class_name()
                     my_model.save()
                     print(my_model.id)
 
@@ -71,7 +72,8 @@ class HBNBCommand(cmd.Cmd):
                             val.append(ident)
                         i = 0
                         for key, value in obj.items():
-                            if second == val[i]:
+                            cls_name, ident = key.split(".")
+                            if second == val[i] and cls_name == first:
                                 print(value)
                                 break
                             i = i + 1
@@ -121,7 +123,8 @@ class HBNBCommand(cmd.Cmd):
                             val.append(ident)
                         i = 0
                         for key, value in obj.items():
-                            if second == val[i]:
+                            cls_name, ident = key.split(".")
+                            if second == val[i] and cls_name == first:
                                 del obj[key]
                                 storage.save()
                                 break
@@ -164,7 +167,9 @@ class HBNBCommand(cmd.Cmd):
                     obj = storage.all()
                     val = []
                     for key, value in obj.items():
-                        val.append(str(value))
+                        cls_name, ident = key.split(".")
+                        if cls_name == line:
+                            val.append(str(value))
                     print(val)
 
     def do_update(self, line):
@@ -224,8 +229,8 @@ class HBNBCommand(cmd.Cmd):
                             if four_words is True:
                                 strtyp = False
                                 for i in range(a, len(line)):
-                                    """
                                     if line[i] == '"':
+                                        strtyp = True
                                         i = i + 1
                                         for i in range(i, len(line)):
                                             if line[i] == '"':
@@ -233,7 +238,6 @@ class HBNBCommand(cmd.Cmd):
                                             else:
                                                 fourth = fourth + line[i]
                                         break
-                                    """
                                     if line[i] == " ":
                                         a = i + 1
                                         break
@@ -241,10 +245,7 @@ class HBNBCommand(cmd.Cmd):
                                 obj = storage.all()
                                 val = []
                                 if strtyp is False:
-                                    print(fourth)
                                     fourth = eval(fourth)
-                                    print(fourth)
-                                    print(type(fourth))
                                 for key, value in obj.items():
                                     cls_name, ident = key.split(".")
                                     val.append(ident)
@@ -254,7 +255,8 @@ class HBNBCommand(cmd.Cmd):
                                         break
                                     if third == "updated_at":
                                         break
-                                    if second == val[i]:
+                                    cls_name, ident = key.split(".")
+                                    if second == val[i] and cls_name == first:
                                         setattr(value, third, fourth)
                                         value.save()
                                         break
@@ -269,7 +271,8 @@ class HBNBCommand(cmd.Cmd):
                                     val.append(ident)
                                 i = 0
                                 for key, value in obj.items():
-                                    if second == val[i]:
+                                    cls_name, ident = key.split(".")
+                                    if second == val[i] and cls_name == first:
                                         print("** value missing **")
                                         break
                                     i = i + 1
@@ -283,7 +286,8 @@ class HBNBCommand(cmd.Cmd):
                                 val.append(ident)
                             i = 0
                             for key, value in obj.items():
-                                if second == val[i]:
+                                cls_name, ident = key.split(".")
+                                if second == val[i] and cls_name == first:
                                     print("** attribute name missing **")
                                     break
                                 i = i + 1
