@@ -7,6 +7,11 @@ import cmd
 from models.base_model import BaseModel
 from models.user import User
 from models import storage
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -316,6 +321,83 @@ class HBNBCommand(cmd.Cmd):
         Empty line + ENTER shouldn’t execute anything
         """
         return
+    
+    def parseline(self, line):
+        """
+        retrieve all instances of a class by using: 
+        <class name>.command(function)
+        """
+        if line == 'quit':
+            ret = cmd.Cmd.parseline(self, line)
+        else:
+            ret = cmd.Cmd.parseline(self, line)
+            try:
+                if ret[1][0] == ".":
+                    try:
+                        first, second = ret[2].split(".")
+                        second, third = second.split("(")
+                        thrd = ""
+                        line = second + " " + first
+                        ret = cmd.Cmd.parseline(self, line)
+                        for i in range(1, len(third)):
+                            if third[i] == '"':
+                               fourth = third[(i+1):]
+                               break
+                            else:
+                                thrd = thrd + third[i]
+                        line = second + " " + first + " " + thrd
+                        ret = cmd.Cmd.parseline(self, line)
+                        for i in range(0, len(fourth)):
+                            if fourth[i] == '"':
+                               fouth = fourth[(i+1):]
+                               break
+                        print(fouth)
+                        fourth = ""
+                        for i in range(0, len(fouth)):
+                            if fouth[i] == '"':
+                                fifth = fifth[(i+1):]
+                                break
+                            else:
+                                fourth = fourth + fouth[i]
+                        line = second + " " + first + " " + thrd + " " + fourth
+                        ret = cmd.Cmd.parseline(self, line)
+                        for i in range(0, len(fifth)):
+                            if fifth[i] == '"':
+                               sixth = fifth[i:]
+                               break
+                        strtyp = False
+                        for i in range(0, len(sixth)):
+                            if sixth[i] == '"':
+                                strtyp = True
+                                break
+                            else:
+                                strtyp = False
+                                break
+                        if strtyp is True:
+                            fifth = '"'
+                            for i in range(1, len(sixth)):
+                                if sixth[i] == '"':
+                                    fifth = fifth + sixth[i]
+                                    break
+                                else:
+                                    fifth = fifth + sixth[i]
+                        else:
+                            fifth = ""
+                            for i in range(1, len(sixth)):
+                                if sixth[i] == '"':
+                                    break
+                                else:
+                                    fifth = fifth + sixth[i]
+                        print(line)
+                        line = second + " " + first + " " + thrd + " " + (
+                            fourth + " " + fifth)
+                        print(line)
+                        ret = cmd.Cmd.parseline(self, line)
+                    except:
+                        pass
+            except:
+                ret = cmd.Cmd.parseline(self, line)
+        return ret
 
 
 if __name__ == '__main__':
