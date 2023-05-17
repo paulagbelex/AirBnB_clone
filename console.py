@@ -223,62 +223,99 @@ class HBNBCommand(cmd.Cmd):
                         print("** class doesn't exist **")
                     if x is True:
                         if three_words is True:
+                            dictype = False
                             for i in range(a, len(line)):
-                                if line[i] == " ":
-                                    a = i + 1
+                                if line[i] == '{':
+                                    dictype = True
+                                    third = third + line[i]
+                                    i = i + 1
+                                    for i in range(i, len(line)):
+                                        if line[i] == '}':
+                                            third = third + line[i]
+                                            break
+                                        else:
+                                            third = third + line[i]
+                                else:
                                     break
-                                third = third + line[i]
-                            four_words = True
-                            if i == j:
-                                four_words = False
-                            if four_words is True:
-                                strtyp = False
+                            if dictype is False:
                                 for i in range(a, len(line)):
-                                    if line[i] == '"':
-                                        strtyp = True
-                                        i = i + 1
-                                        for i in range(i, len(line)):
-                                            if line[i] == '"':
-                                                break
-                                            else:
-                                                fourth = fourth + line[i]
-                                        break
                                     if line[i] == " ":
                                         a = i + 1
                                         break
-                                    fourth = fourth + line[i]
+                                    third = third + line[i]
+                                four_words = True
+                                if i == j:
+                                    four_words = False
+                                if four_words is True:
+                                    strtyp = False
+                                    for i in range(a, len(line)):
+                                        if line[i] == '"':
+                                            strtyp = True
+                                            i = i + 1
+                                            for i in range(i, len(line)):
+                                                if line[i] == '"':
+                                                    break
+                                                else:
+                                                    fourth = fourth + line[i]
+                                            break
+                                        if line[i] == " ":
+                                            a = i + 1
+                                            break
+                                        fourth = fourth + line[i]
+                                    obj = storage.all()
+                                    val = []
+                                    if strtyp is False:
+                                        fourth = eval(fourth)
+                                    for key, value in obj.items():
+                                        cls_name, ident = key.split(".")
+                                        val.append(ident)
+                                    i = 0
+                                    for key, value in obj.items():
+                                        if third == "id" or third == "created_at":
+                                            break
+                                        if third == "updated_at":
+                                            break
+                                        cls_name, ident = key.split(".")
+                                        if second == val[i] and cls_name == first:
+                                            setattr(value, third, fourth)
+                                            value.save()
+                                            break
+                                        i = i + 1
+                                    if i == len(val):
+                                        print("** no instance found **")
+                                else:
+                                    obj = storage.all()
+                                    val = []
+                                    for key, value in obj.items():
+                                        cls_name, ident = key.split(".")
+                                        val.append(ident)
+                                    i = 0
+                                    for key, value in obj.items():
+                                        cls_name, ident = key.split(".")
+                                        if second == val[i] and cls_name == first:
+                                            print("** value missing **")
+                                            break
+                                        i = i + 1
+                                    if i == len(val):
+                                        print("** no instance found **")
+                            elif dictype is True:
+                                third = eval(third)
                                 obj = storage.all()
                                 val = []
-                                if strtyp is False:
-                                    fourth = eval(fourth)
                                 for key, value in obj.items():
                                     cls_name, ident = key.split(".")
                                     val.append(ident)
                                 i = 0
                                 for key, value in obj.items():
-                                    if third == "id" or third == "created_at":
-                                        break
-                                    if third == "updated_at":
-                                        break
                                     cls_name, ident = key.split(".")
                                     if second == val[i] and cls_name == first:
-                                        setattr(value, third, fourth)
+                                        for keyy, vall in third.items():
+                                            if keyy == 'created_at':
+                                                continue
+                                            if keyy == 'updated_at':
+                                                continue
+                                            setattr(value, keyy, vall)
                                         value.save()
-                                        break
-                                    i = i + 1
-                                if i == len(val):
-                                    print("** no instance found **")
-                            else:
-                                obj = storage.all()
-                                val = []
-                                for key, value in obj.items():
-                                    cls_name, ident = key.split(".")
-                                    val.append(ident)
-                                i = 0
-                                for key, value in obj.items():
-                                    cls_name, ident = key.split(".")
-                                    if second == val[i] and cls_name == first:
-                                        print("** value missing **")
                                         break
                                     i = i + 1
                                 if i == len(val):
@@ -346,53 +383,71 @@ class HBNBCommand(cmd.Cmd):
                             else:
                                 thrd = thrd + third[i]
                         line = second + " " + first + " " + thrd
-                        ret = cmd.Cmd.parseline(self, line)
+                        ret = cmd.Cmd.parseline(self, line)    
+                        dictype = False
                         for i in range(0, len(fourth)):
-                            if fourth[i] == '"':
-                               fouth = fourth[(i+1):]
-                               break
-                        print(fouth)
-                        fourth = ""
-                        for i in range(0, len(fouth)):
-                            if fouth[i] == '"':
-                                fifth = fifth[(i+1):]
-                                break
-                            else:
-                                fourth = fourth + fouth[i]
-                        line = second + " " + first + " " + thrd + " " + fourth
-                        ret = cmd.Cmd.parseline(self, line)
-                        for i in range(0, len(fifth)):
-                            if fifth[i] == '"':
-                               sixth = fifth[i:]
-                               break
-                        strtyp = False
-                        for i in range(0, len(sixth)):
-                            if sixth[i] == '"':
-                                strtyp = True
-                                break
-                            else:
-                                strtyp = False
-                                break
-                        if strtyp is True:
-                            fifth = '"'
-                            for i in range(1, len(sixth)):
-                                if sixth[i] == '"':
-                                    fifth = fifth + sixth[i]
-                                    break
-                                else:
-                                    fifth = fifth + sixth[i]
+                            if fourth[i] == '{':
+                                dictype = True
+                                fouth = ""
+                                fouth = fouth + fourth[i]
+                                i = i + 1
+                                for i in range(i, len(fourth)):
+                                    if fourth[i] == '}':
+                                        fouth = fouth + fourth[i]
+                                        break
+                                    else:
+                                        fouth = fouth + fourth[i]
+                        if dictype is True:
+                            line = second + " " + first + " " + thrd + (
+                                    " " + fouth)
+                            ret = cmd.Cmd.parseline(self, line)
                         else:
-                            fifth = ""
-                            for i in range(1, len(sixth)):
-                                if sixth[i] == '"':
+                            for i in range(0, len(fourth)):
+                                if fourth[i] == '"':
+                                    fouth = fourth[(i+1):]
+                                    break
+                            fourth = ""
+                            for i in range(0, len(fouth)):
+                                if fouth[i] == '"':
+                                    fifth = fouth[(i+1):]
                                     break
                                 else:
-                                    fifth = fifth + sixth[i]
-                        print(line)
-                        line = second + " " + first + " " + thrd + " " + (
-                            fourth + " " + fifth)
-                        print(line)
-                        ret = cmd.Cmd.parseline(self, line)
+                                    fourth = fourth + fouth[i]
+                            line = second + " " + first + " " + thrd + " " + fourth
+                            ret = cmd.Cmd.parseline(self, line)
+                            ffth = ""
+                            sixth = ""
+                            for i in range(0, len(fifth)):
+                                if fifth[i] == '"':
+                                    sixth = fifth[i:]
+                                    break
+                                else:
+                                    if fifth[i] == ')':
+                                        break
+                                    ffth = ffth + fifth[i]
+                            strtyp = False
+                            for i in range(0, len(sixth)):
+                                if sixth[i] == '"':
+                                    strtyp = True
+                                    break
+                            if strtyp is True:
+                                fifth = '"'
+                                for i in range(1, len(sixth)):
+                                    if sixth[i] == '"':
+                                        fifth = fifth + sixth[i]
+                                        break
+                                    else:
+                                        fifth = fifth + sixth[i]
+                            else:
+                                fifth = ""
+                                for i in range(2, len(ffth)):
+                                    if ffth[i] == ',':
+                                        break
+                                    else:
+                                        fifth = fifth + ffth[i]
+                            line = second + " " + first + " " + thrd + " " + (
+                                fourth + " " + fifth)
+                            ret = cmd.Cmd.parseline(self, line)
                     except:
                         pass
             except:
