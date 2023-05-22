@@ -58,6 +58,12 @@ class FileStorage():
         deserializes the JSON file to __objects
         """
         from models.base_model import BaseModel
+        from models.user import User
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.review import Review
         if os.path.isfile(FileStorage.__file_path) is not True:
             return
         temp = {}
@@ -68,7 +74,9 @@ class FileStorage():
         b = 0
         for key_1, value_1 in data.items():
             temp[a] = value_1
-            new.append(BaseModel(**temp[a]))
+            cls_nme, ident = key_1.split(".")
+            class_name = eval(cls_nme)
+            new.append(class_name(**temp[a]))
             FileStorage.__objects[key_1] = new[b]
             a = a + 1
             b = b + 1
